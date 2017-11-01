@@ -11,7 +11,7 @@ void cpmutex::lock()
 	while (!c) {
 		//this executes if mutex was locked(c==false - value of locked was not updated at line 10 or 16)
 		// waits on futex until "locked" is changed and futex called with FUTEX_WAKE
-		syscall(SYS_futex, &locked, FUTEX_WAIT, 1, 0, 0, 0, -1); 
+		syscall(SYS_futex, &locked, FUTEX_WAIT, 1, 0, 0, 0, -1); // see futex.c in linux kernel source for detailed description
 		z = 0;
 		c = locked.compare_exchange_strong(z, 1);
 	}
