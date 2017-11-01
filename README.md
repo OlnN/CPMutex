@@ -1,2 +1,2 @@
 # CPMutex
-Mutex implementation in C++ for Linux based on futex
+Mutex implementation in C++ for Linux based on futex system call.
