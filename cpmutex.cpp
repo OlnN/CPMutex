@@ -5,7 +5,7 @@ void cpmutex::lock()
 {
 	bool c = false;
 	int z = 0;
-	count++; // increase counter of waiting threads
+	count++; // increase counter of waiting threads: std::atomic<int>::operator++()
 	// atomically get value of "locked", and set it to 1(futex locked) if value was 0(futex was unlocked)
 	// locking must be done atomically in case other threads are locking mutex at the same time too
 	c = locked.compare_exchange_strong(z, 1); // c == true if exchanged performed, false otherwise
