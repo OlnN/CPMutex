@@ -3,13 +3,11 @@ using namespace std;
 
 void cpmutex::lock()
 {
-	bool c = false;
 	int z = 0;
 	count++; // increase counter of waiting threads: std::atomic<int>::operator++()
 	// atomically get value of "locked", and set it to 1(futex locked) if value was 0(futex was unlocked)
 	// locking must be done atomically in case other threads are locking mutex at the same time too
-	c = locked.compare_exchange_strong(z, 1); // c == true if exchanged performed, false otherwise
-	while (!c) {
+	while (!locked.compare_exchange_strong(z, 1)) {	// !true if  exchange been performed, !false otherwise
 		// if kernel sees that *locked == 3rd argument(=1) of SYS_futex, then thread is enqueued in wait queue inside kernel
 		// syscall waits on futex until futex called with FUTEX_WAKE
 		// address of "locked" is id of mutex inside SYS_futex
@@ -17,7 +15,6 @@ void cpmutex::lock()
 		// thread is waked from futex here; it tries to lock futex again
 		// locking must be done atomically in case other threads are locking mutex at the same time too
 		z = 0;
-		c = locked.compare_exchange_strong(z, 1);
 	}
 }
 
