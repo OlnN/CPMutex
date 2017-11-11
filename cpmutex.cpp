@@ -11,7 +11,7 @@ void cpmutex::lock()
 		// if kernel sees that *locked == 3rd argument(=1) of SYS_futex, then thread is enqueued in wait queue inside kernel
 		// syscall waits on futex until futex called with FUTEX_WAKE
 		// address of "locked" is id of mutex inside SYS_futex
-		syscall(SYS_futex, &locked, FUTEX_WAIT, 1, 0, 0, 0, -1); // see futex.c in linux kernel source for detailed description
+		syscall(SYS_futex, &locked, FUTEX_WAIT, 1, 0, 0, 0, -1); // see "man futex" and futex.c in linux kernel source for detailed description
 		// thread is waked from futex here; it tries to lock futex again
 		// locking must be done atomically in case other threads are locking mutex at the same time too
 		z = 0;
